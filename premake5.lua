@@ -14,21 +14,24 @@ project "RogueLike"
   }
 
   includedirs {
-    "lib/SDL2/include"
+    "lib/SDL2/include",
+    "lib/SDL2_image/include"
   }
 
   libdirs {
-    "lib/SDL2/lib/x64"
+    "lib/SDL2/lib/x64",
+    "lib/SDL2_image/lib/x64"
   }
 
-  links { "SDL2" }
+  links { "SDL2", "SDL2_image" }
 
   filter "configurations:Debug"
     defines { "DEBUG" }
     symbols "On"
 
     postbuildcommands {
-      "{COPYFILE} lib/SDL2/lib/x64/SDL2.dll bin/Debug/SDL2.dll"      
+      "{COPYFILE} lib/SDL2/lib/x64/SDL2.dll bin/Debug/SDL2.dll",
+      "{COPYFILE} lib/SDL2_image/lib/x64/SDL2_image.dll bin/Debug/SDL2_image.dll"
     }
 
   filter "configurations:Release"
