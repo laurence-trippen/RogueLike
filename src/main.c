@@ -1,6 +1,9 @@
 #include <stdio.h>
 
-int main(void)
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+
+int main(int argc, char* args[])
 {
   puts("Hello World!\n");
 
