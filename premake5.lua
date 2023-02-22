@@ -27,6 +27,11 @@ project "RogueLike"
     defines { "DEBUG" }
     symbols "On"
 
+    postbuildcommands {
+      "{COPYFILE} lib/SDL2/lib/x64/SDL2.dll bin/Debug/SDL2.dll"      
+    }
+
   filter "configurations:Release"
     defines { "NDEBUG" }
     optimize "On"
+    -- TODO: Copy SDL2 to release location
