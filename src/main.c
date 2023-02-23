@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include "gfx/texture_atlas.h"
 
 int main(int argc, char* args[])
 {
@@ -39,6 +40,8 @@ int main(int argc, char* args[])
 	texture_rect.w = 50;	// the width of the texture
 	texture_rect.h = 50;	// the height of the texture
 
+	gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
+
 	// Game Loop
 	bool done = false;
 	while (!done)
@@ -57,7 +60,13 @@ int main(int argc, char* args[])
 		SDL_SetRenderDrawColor(renderer, 100, 149, 237, 255);
 		SDL_RenderClear(renderer);
 
-		SDL_RenderCopy(renderer, texture, NULL, &texture_rect);
+		SDL_Rect clip_rect;
+		clip_rect.x = 0;
+		clip_rect.y = 0;
+		clip_rect.w = 10;
+		clip_rect.h = 10;
+
+		SDL_RenderCopy(renderer, texture, &clip_rect, &texture_rect);
 
 		// Show the renderer contents
 		SDL_RenderPresent(renderer);
