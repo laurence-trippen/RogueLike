@@ -34,8 +34,8 @@ int main(int argc, char* args[])
 	}
 
 	SDL_Rect texture_rect;
-	texture_rect.x = 0;		// the x coordinate
-	texture_rect.y = 0;		// the y coordinate
+	texture_rect.x = 10;		// the x coordinate
+	texture_rect.y = 10;		// the y coordinate
 	texture_rect.w = 50;	// the width of the texture
 	texture_rect.h = 50;	// the height of the texture
 

@@ -25,6 +25,10 @@ project "RogueLike"
 
   links { "SDL2", "SDL2_image" }
 
+  vpaths {
+    ["src/*"] = { "src/*.h", "src/*.c" }
+  }
+
   filter "configurations:Debug"
     defines { "DEBUG" }
     symbols "On"
