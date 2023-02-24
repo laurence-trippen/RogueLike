@@ -4,7 +4,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
+
+#include "../io/file_utils.h"
 
 #define MAX_LINE_LENGTH 150
 #define ATLAS_PROP_INDEX_TITLE 1
@@ -17,6 +20,13 @@
 
 GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 {
+	int32_t line_count = io_get_file_line_count(path, true);
+	printf("Entry count: %d\n", line_count);
+	if (line_count < 0)
+	{
+		return NULL;
+	}
+
 	FILE* file = fopen(path, "r");
 	if (file == NULL)
 	{
@@ -26,14 +36,25 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 
 	puts("Successfully opened file");
 
+	// Atlas structure
+	GFX_Texture_Atlas* atlas = (GFX_Texture_Atlas*) malloc(sizeof(GFX_Texture_Atlas));
+	if (atlas == NULL) return NULL;
+
+	// Initialize atlas
+	atlas->length = line_count;
+	atlas->entries = (GFX_Texture_Atlas_Entry*) calloc(line_count, sizeof(GFX_Texture_Atlas_Entry));
+	if (atlas->entries == NULL) return NULL;
+
+	// Line by line reading with tokenizing
 	char single_line[MAX_LINE_LENGTH];
 	char delimiter[] = " ";
 
+	uint32_t line_counter = 0;
 	while (!feof(file))
 	{
 		fgets(single_line, MAX_LINE_LENGTH, file);
 
-		puts(single_line);
+		// puts(single_line);
 
 		// If empty line "\n" then skip cycle
 		if (*single_line == '\n')
@@ -44,23 +65,16 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 		// Splitting
 		char* word_ptr = strtok(single_line, delimiter);
 		
+		GFX_Texture_Atlas_Entry* atlas_entry = &(atlas->entries[line_counter]);
+		line_counter++;
+
+
 		uint8_t word_count = 0;
-
-		GFX_Texture_Atlas_Entry* atlas_entry = (GFX_Texture_Atlas_Entry*) malloc(sizeof(GFX_Texture_Atlas_Entry));
-
-		// Check if allocation wasn't successful
-		if (atlas_entry == NULL) return NULL;
-
-		// Set Default values for entry
-		atlas_entry->x = 0;
-		atlas_entry->y = 0;
-		atlas_entry->w = 0;
-		atlas_entry->h = 0;
-		atlas_entry->frames = 0;
-
 		while (word_ptr != NULL)
 		{
 			word_count++;
+
+			int32_t x = 0;
 
 			switch (word_count)
 			{
@@ -84,7 +98,7 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 				atlas_entry->w = atoi(word_ptr);
 				break;
 			case ATLAS_PROP_INDEX_H:
-				atlas_entry->h = atoi(word_ptr);
+				atlas_entry->y = atoi(word_ptr);
 				break;
 			case ATLAS_PROP_INDEX_FRAMES:
 				atlas_entry->frames = atoi(word_ptr);
@@ -97,6 +111,7 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 			word_ptr = strtok(NULL, delimiter);
 		}
 
+		/*
 		printf(
 			"Title: %s, X: %d, Y: %d, W: %d, H: %d, F: %d\n", 
 			atlas_entry->title, 
@@ -108,9 +123,10 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 		);
 
 		puts("-----");
+		*/
 	}
 
 	fclose(file);
 
-	return NULL;
+	return atlas;
 }

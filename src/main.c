@@ -8,7 +8,6 @@
 #include <SDL_image.h>
 
 #include "gfx/texture_atlas.h"
-#include "io/file_utils.h"
 
 int main(int argc, char* args[])
 {
@@ -42,11 +41,20 @@ int main(int argc, char* args[])
 	texture_rect.w = 50;	// the width of the texture
 	texture_rect.h = 50;	// the height of the texture
 
-	int32_t line_count = io_get_file_line_count("assets/DungeonTileset/tiles_list_v1.4", true);
-	printf("%d", line_count);
-
 	// Should have 161x entries
-	// gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
+	GFX_Texture_Atlas* p_atlas = gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
+	printf("Atlas Entries: %zu\n", p_atlas->length);
+
+	for (int i = 0; i < p_atlas->length; i++)
+	{
+		printf("Title: %s\n", p_atlas->entries[i].title);
+		printf("X: %d\n", p_atlas->entries[i].x);
+		printf("Y: %d\n", p_atlas->entries[i].y);
+		printf("W: %d\n", p_atlas->entries[i].w);
+		printf("H: %d\n", p_atlas->entries[i].h);
+		printf("F: %d\n", p_atlas->entries[i].frames);
+		printf("----\n");
+	}
 
 	// Game Loop
 	bool done = false;
@@ -72,13 +80,15 @@ int main(int argc, char* args[])
 		clip_rect.w = 10;
 		clip_rect.h = 10;
 
-		SDL_RenderCopy(renderer, texture, &clip_rect, &texture_rect);
+		SDL_RenderCopy(renderer, texture, NULL, &texture_rect);
 
 		// Show the renderer contents
 		SDL_RenderPresent(renderer);
 	}
 
 	// Cleanup
+	// TODO: Free Texture Atlas
+
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 
