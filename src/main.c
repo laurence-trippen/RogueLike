@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 #define SDL_MAIN_HANDLED
@@ -7,6 +8,7 @@
 #include <SDL_image.h>
 
 #include "gfx/texture_atlas.h"
+#include "io/file_utils.h"
 
 int main(int argc, char* args[])
 {
@@ -40,7 +42,11 @@ int main(int argc, char* args[])
 	texture_rect.w = 50;	// the width of the texture
 	texture_rect.h = 50;	// the height of the texture
 
-	gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
+	int32_t line_count = io_get_file_line_count("assets/DungeonTileset/tiles_list_v1.4", true);
+	printf("%d", line_count);
+
+	// Should have 161x entries
+	// gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
 
 	// Game Loop
 	bool done = false;
