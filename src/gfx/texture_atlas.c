@@ -68,13 +68,10 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 		GFX_Texture_Atlas_Entry* atlas_entry = &(atlas->entries[line_counter]);
 		line_counter++;
 
-
 		uint8_t word_count = 0;
 		while (word_ptr != NULL)
 		{
 			word_count++;
-
-			int32_t x = 0;
 
 			switch (word_count)
 			{
@@ -98,7 +95,7 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 				atlas_entry->w = atoi(word_ptr);
 				break;
 			case ATLAS_PROP_INDEX_H:
-				atlas_entry->y = atoi(word_ptr);
+				atlas_entry->h = atoi(word_ptr);
 				break;
 			case ATLAS_PROP_INDEX_FRAMES:
 				atlas_entry->frames = atoi(word_ptr);
@@ -129,4 +126,18 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 	fclose(file);
 
 	return atlas;
+}
+
+void gfx_debug_print_atlas(GFX_Texture_Atlas* p_atlas)
+{
+	for (int i = 0; i < p_atlas->length; i++)
+	{
+		printf("Title: %s\n", p_atlas->entries[i].title);
+		printf("X: %d\n", p_atlas->entries[i].x);
+		printf("Y: %d\n", p_atlas->entries[i].y);
+		printf("W: %d\n", p_atlas->entries[i].w);
+		printf("H: %d\n", p_atlas->entries[i].h);
+		printf("F: %d\n", p_atlas->entries[i].frames);
+		printf("----\n");
+	}
 }

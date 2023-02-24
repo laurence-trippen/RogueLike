@@ -18,6 +18,7 @@ typedef struct GFX_Texture_Atlas {
 
 
 GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path);
+void gfx_debug_print_atlas(GFX_Texture_Atlas* p_atlas);
 
 
 #endif
