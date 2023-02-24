@@ -36,10 +36,10 @@ int main(int argc, char* args[])
 	}
 
 	SDL_Rect texture_rect;
-	texture_rect.x = 0;		// the x coordinate
-	texture_rect.y = 0;		// the y coordinate
-	texture_rect.w = 512;	// the width of the texture
-	texture_rect.h = 512;	// the height of the texture
+	texture_rect.x = 50;		// the x coordinate
+	texture_rect.y = 50;		// the y coordinate
+	texture_rect.w = 20;	// the width of the texture
+	texture_rect.h = 60;	// the height of the texture
 
 	// Should have 161x entries
 	GFX_Texture_Atlas* p_atlas = gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
@@ -65,13 +65,17 @@ int main(int argc, char* args[])
 		SDL_SetRenderDrawColor(renderer, 100, 149, 237, 255);
 		SDL_RenderClear(renderer);
 
-		SDL_Rect clip_rect;
-		clip_rect.x = p_atlas->entries[0].x;
-		clip_rect.y = p_atlas->entries[0].y;
-		clip_rect.w = p_atlas->entries[0].w;
-		clip_rect.h = p_atlas->entries[0].h;
+		int index = 80;
 
-		SDL_RenderCopy(renderer, texture, NULL, &texture_rect);
+		SDL_Rect clip_rect;
+		clip_rect.x = p_atlas->entries[index].x;
+		clip_rect.y = p_atlas->entries[index].y;
+		clip_rect.w = p_atlas->entries[index].w;
+		clip_rect.h = p_atlas->entries[index].h;
+		// clip_rect.w = 512;
+		// clip_rect.h = 512;
+
+		SDL_RenderCopy(renderer, texture, &clip_rect, &texture_rect);
 
 		// Show the renderer contents
 		SDL_RenderPresent(renderer);
