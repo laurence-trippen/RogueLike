@@ -19,6 +19,10 @@ int main(int argc, char* args[])
 		return -1;
 	}
 
+	// Window Icon
+	SDL_Surface* window_icon = IMG_Load("assets/test.png");
+	SDL_SetWindowIcon(window, window_icon);
+
 	// Renderer
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (!renderer)
@@ -72,8 +76,6 @@ int main(int argc, char* args[])
 		clip_rect.y = p_atlas->entries[index].y;
 		clip_rect.w = p_atlas->entries[index].w;
 		clip_rect.h = p_atlas->entries[index].h;
-		// clip_rect.w = 512;
-		// clip_rect.h = 512;
 
 		SDL_RenderCopy(renderer, texture, &clip_rect, &texture_rect);
 
