@@ -44,7 +44,7 @@ int main(int argc, char* args[])
 	printf("Atlas Entries: %zu\n", p_atlas->length);
 	// gfx_debug_print_atlas(p_atlas);
 
-	GFX_Texture_Atlas_Entry* found_atlas_entry = gfx_find_atlas_entry_by_id(p_atlas, "ui_heart_full");
+	GFX_Texture_Atlas_Entry* found_atlas_entry = gfx_find_atlas_entry_by_id(p_atlas, "weapon_knife");
 	gfx_debug_print_atlas_entry(found_atlas_entry);
 
 	SDL_Rect texture_rect;

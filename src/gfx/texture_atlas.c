@@ -136,7 +136,7 @@ GFX_Texture_Atlas_Entry* gfx_find_atlas_entry_by_id(GFX_Texture_Atlas* p_atlas, 
 
 	for (int i = 0; i < p_atlas->length; i++)
 	{
-		if (*(p_atlas->entries[i].title) == *id)
+		if (strcmp(p_atlas->entries[i].title, id) == 0)
 		{
 			return &(p_atlas->entries[i]);
 		}
