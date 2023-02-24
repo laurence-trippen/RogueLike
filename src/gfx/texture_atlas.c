@@ -128,6 +128,24 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 	return atlas;
 }
 
+
+// Finds entry via ID string compare. This operation is linear and should be better replaced with a Hash-Table.
+GFX_Texture_Atlas_Entry* gfx_find_atlas_entry_by_id(GFX_Texture_Atlas* p_atlas, const char* id)
+{
+	if (p_atlas == NULL) return NULL;
+
+	for (int i = 0; i < p_atlas->length; i++)
+	{
+		if (*(p_atlas->entries[i].title) == *id)
+		{
+			return &(p_atlas->entries[i]);
+		}
+	}
+
+	return NULL;
+}
+
+
 void gfx_debug_print_atlas(GFX_Texture_Atlas* p_atlas)
 {
 	for (int i = 0; i < p_atlas->length; i++)
@@ -140,4 +158,17 @@ void gfx_debug_print_atlas(GFX_Texture_Atlas* p_atlas)
 		printf("F: %d\n", p_atlas->entries[i].frames);
 		printf("----\n");
 	}
+}
+
+
+void gfx_debug_print_atlas_entry(GFX_Texture_Atlas_Entry* p_atlas_entry)
+{
+	if (p_atlas_entry == NULL) return;
+
+	printf("Title: %s\n", p_atlas_entry->title);
+	printf("X: %d\n", p_atlas_entry->x);
+	printf("Y: %d\n", p_atlas_entry->y);
+	printf("W: %d\n", p_atlas_entry->w);
+	printf("H: %d\n", p_atlas_entry->h);
+	printf("F: %d\n", p_atlas_entry->frames);
 }

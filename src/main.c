@@ -39,17 +39,19 @@ int main(int argc, char* args[])
 		return -1;
 	}
 
-	SDL_Rect texture_rect;
-	texture_rect.x = 50;		// the x coordinate
-	texture_rect.y = 50;		// the y coordinate
-	texture_rect.w = 20;	// the width of the texture
-	texture_rect.h = 60;	// the height of the texture
-
 	// Should have 161x entries
 	GFX_Texture_Atlas* p_atlas = gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
 	printf("Atlas Entries: %zu\n", p_atlas->length);
+	// gfx_debug_print_atlas(p_atlas);
 
-	gfx_debug_print_atlas(p_atlas);
+	GFX_Texture_Atlas_Entry* found_atlas_entry = gfx_find_atlas_entry_by_id(p_atlas, "ui_heart_full");
+	gfx_debug_print_atlas_entry(found_atlas_entry);
+
+	SDL_Rect texture_rect;
+	texture_rect.x = 50;
+	texture_rect.y = 50;
+	texture_rect.w = found_atlas_entry->w * 3;
+	texture_rect.h = found_atlas_entry->h * 3;
 
 	// Game Loop
 	bool done = false;
@@ -69,13 +71,11 @@ int main(int argc, char* args[])
 		SDL_SetRenderDrawColor(renderer, 100, 149, 237, 255);
 		SDL_RenderClear(renderer);
 
-		int index = 80;
-
 		SDL_Rect clip_rect;
-		clip_rect.x = p_atlas->entries[index].x;
-		clip_rect.y = p_atlas->entries[index].y;
-		clip_rect.w = p_atlas->entries[index].w;
-		clip_rect.h = p_atlas->entries[index].h;
+		clip_rect.x = found_atlas_entry->x;
+		clip_rect.y = found_atlas_entry->y;
+		clip_rect.w = found_atlas_entry->w;
+		clip_rect.h = found_atlas_entry->h;
 
 		SDL_RenderCopy(renderer, texture, &clip_rect, &texture_rect);
 
