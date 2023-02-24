@@ -35,6 +35,12 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 
 		puts(single_line);
 
+		// If empty line "\n" then skip cycle
+		if (*single_line == '\n')
+		{
+			continue;
+		}
+		
 		// Splitting
 		char* word_ptr = strtok(single_line, delimiter);
 		
@@ -85,8 +91,8 @@ GFX_Texture_Atlas* gfx_load_texture_atlas(const char* path)
 				break;
 			}
 			
-			printf("%d\n", word_count);
-			printf("'%s'\n", word_ptr);
+			// printf("%d\n", word_count);
+			// printf("'%s'\n", word_ptr);
 
 			word_ptr = strtok(NULL, delimiter);
 		}
