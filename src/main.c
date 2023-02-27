@@ -8,6 +8,10 @@
 #include <SDL_image.h>
 
 #include "gfx/texture_atlas.h"
+#include "gfx/renderer.h"
+
+#include "game/game.h"
+#include "game/game_object.h"
 
 int main(int argc, char* args[])
 {
@@ -24,34 +28,21 @@ int main(int argc, char* args[])
 	SDL_SetWindowIcon(window, window_icon);
 
 	// Renderer
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	if (!renderer)
-	{
-		SDL_Log("Could not create a renderer: %s", SDL_GetError());
-		return -1;
-	}
+	gfx_init_renderer(window);
 
 	// Load Media
-	SDL_Texture* texture = IMG_LoadTexture(renderer, "assets/DungeonTileset/0x72_DungeonTilesetII_v1.4.png");
-	if (!texture)
-	{
-		SDL_Log("Could not load texture: %s", SDL_GetError());
-		return -1;
-	}
+	gfx_load_main_atlas_texture("assets/DungeonTileset/0x72_DungeonTilesetII_v1.4.png");
 
 	// Should have 161x entries
-	GFX_Texture_Atlas* p_atlas = gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
-	printf("Atlas Entries: %zu\n", p_atlas->length);
+	GFX_Texture_Atlas* p_atlas_data = gfx_load_texture_atlas("assets/DungeonTileset/tiles_list_v1.4");
+	printf("Atlas Entries: %zu\n", p_atlas_data->length);
 	// gfx_debug_print_atlas(p_atlas);
 
-	GFX_Texture_Atlas_Entry* found_atlas_entry = gfx_find_atlas_entry_by_id(p_atlas, "weapon_knife");
-	gfx_debug_print_atlas_entry(found_atlas_entry);
-
-	SDL_Rect texture_rect;
-	texture_rect.x = 50;
-	texture_rect.y = 50;
-	texture_rect.w = found_atlas_entry->w * 3;
-	texture_rect.h = found_atlas_entry->h * 3;
+	Game_Object* knife = game_create_gameobject("skull", p_atlas_data);
+	knife->transform->x = 50.0f;
+	knife->transform->y = 50.0f;
+	knife->transform->w *= 3.0f;
+	knife->transform->h *= 3.0f;
 
 	// Game Loop
 	bool done = false;
@@ -67,23 +58,20 @@ int main(int argc, char* args[])
 			}
 		}
 
-		// Set the color to cornflower blue and clear
-		SDL_SetRenderDrawColor(renderer, 100, 149, 237, 255);
-		SDL_RenderClear(renderer);
+		knife->angle += 0.01;
 
-		SDL_Rect clip_rect;
-		clip_rect.x = found_atlas_entry->x;
-		clip_rect.y = found_atlas_entry->y;
-		clip_rect.w = found_atlas_entry->w;
-		clip_rect.h = found_atlas_entry->h;
+		// Cornflowerblue like in XNA =)
+		gfx_clear(100, 149, 237, 255);
 
-		SDL_RenderCopy(renderer, texture, &clip_rect, &texture_rect);
+		gfx_render_gameobject(knife);
 
-		// Show the renderer contents
-		SDL_RenderPresent(renderer);
+		gfx_present();
 	}
 
 	// Cleanup
+	free(knife);
+	knife = NULL;
+
 	// TODO: Free Texture Atlas
 
 	SDL_DestroyWindow(window);
